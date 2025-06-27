@@ -1,16 +1,25 @@
 ---
-import ImageMod from "@/components/ImageMod.astro";
+import { Image } from "astro:assets";
 import DynamicIcon from "@/helpers/DynamicIcon";
 import { markdownify } from "@/lib/utils/textConverter";
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath,
+} from "../../i18n/utils";
+import fetchApi from "../../lib/strapi";
+import type Home from "../../interfaces/home";
 
-const { title, description, buttons, images } = (
-  (await getEntry(
-    "homeBannerSection",
-    "home-banner"
-  )) as CollectionEntry<"homeBannerSection">
-).data;
+const lang = getLangFromUrl(Astro.url);
+const homeData = await fetchApi<Home>({
+  endpoint: "home",
+  wrappedByKey: "data",
+  query: { locale: lang, populate: "*" },
+});
+
+const { heroTitle, heroDescription, heroImage } = homeData;
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 {
@@ -19,72 +28,96 @@ const { title, description, buttons, images } = (
       <div class="container">
         <div class="row justify-center">
           <div class="mb-8 text-center md:col-9 lg:col-11">
-            {title && (
+            {heroTitle && (
               <h1
-                set:html={markdownify(title)}
+                set:html={markdownify(heroTitle)}
                 data-aos="fade-up-sm"
                 class="mb-4 text-h3 lg:text-h1"
               />
             )}
-            {description && (
+            {heroDescription && (
               <p
-                set:html={markdownify(description)}
+                set:html={markdownify(heroDescription)}
                 data-aos="fade-up-sm"
                 class="mb-8 text-lg/[inherit]"
               />
             )}
-            {buttons && (
-              <ul class="flex flex-wrap justify-center gap-4">
-                {buttons.map(({ label, link }, index) => (
-                  <li data-aos="fade-up-sm" data-aos-delay={100 + index * 50}>
-                    <a
-                      class={`${index === 0 ? "btn-primary" : "btn-outline-primary"} btn `}
-                      href={link}
-                      target={link.startsWith("http") ? "_blank" : "_self"}
-                      rel="noopener">
-                      {label}
-                      <span class="sr-only">Details</span>
-                      <span class="icon-wrapper">
-                        <span class="icon">
-                          <DynamicIcon icon={"FaArrowRight"} />
-                        </span>
-                        <span class="icon" aria-hidden="true">
-                          <DynamicIcon icon={"FaArrowRight"} />
-                        </span>
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul class="flex flex-wrap justify-center gap-4">
+              <li data-aos="fade-up-sm" data-aos-delay={100 + 0 * 50}>
+                <a
+                  class="btn-primary btn"
+                  href={translatePath("/contact/")}
+                  target="_self"
+                  rel="noopener">
+                  {t("nav.contact")}
+                  <span class="sr-only">Details</span>
+                  <span class="icon-wrapper">
+                    <span class="icon">
+                      <DynamicIcon
+                        icon={
+                          t("direction") == "ltr"
+                            ? "FaArrowRight"
+                            : "FaArrowLeft"
+                        }
+                      />
+                    </span>
+                    <span class="icon" aria-hidden="true">
+                      <DynamicIcon
+                        icon={
+                          t("direction") == "ltr"
+                            ? "FaArrowRight"
+                            : "FaArrowLeft"
+                        }
+                      />
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li data-aos="fade-up-sm" data-aos-delay={100 + 1 * 50}>
+                <a
+                  class="btn-outline-primary btn"
+                  href={translatePath("/about/")}
+                  target="_self"
+                  rel="noopener">
+                  {t("learn")}
+                  <span class="sr-only">Details</span>
+                  <span class="icon-wrapper">
+                    <span class="icon">
+                      <DynamicIcon
+                        icon={
+                          t("direction") == "ltr"
+                            ? "FaArrowRight"
+                            : "FaArrowLeft"
+                        }
+                      />
+                    </span>
+                    <span class="icon" aria-hidden="true">
+                      <DynamicIcon
+                        icon={
+                          t("direction") == "ltr"
+                            ? "FaArrowRight"
+                            : "FaArrowLeft"
+                        }
+                      />
+                    </span>
+                  </span>
+                </a>
+              </li>
+            </ul>
           </div>
-          {images && (
+          {heroImage && (
             <>
               <div
                 class="col-12 lg:pt-2 order-2"
                 data-aos="fade-up-sm"
                 data-aos-delay="400">
                 <div class="max-h-[510px] overflow-hidden">
-                  {images[0] && (
-                    <ImageMod src={images[0].src} alt={images[0].alt} />
-                  )}
-                </div>
-              </div>
-              <div class="col-12 pb-4 pt-16 lg:pb-0 order-1">
-                <div class="flex flex-wrap justify-center gap-4 px-4 lg:flex-nowrap lg:justify-between lg:px-0">
-                  {images.slice(1, 4).map(({ src, alt }, index) => (
-                    <div
-                      class={`${index === 0 ? "lg:mt-8 [&.aos-animate]:lg:!rotate-[-9.4deg]" : index === 1 ? "[&.aos-animate]:lg:!rotate-[2.57deg]" : "[&.aos-animate]:lg:!rotate-[-8.52deg]"}`}
-                      data-aos="fade-in"
-                      data-aos-duration="400"
-                      data-aos-delay={150 + index * 150 + 50}>
-                      <ImageMod
-                        src={src}
-                        alt={alt}
-                        class={`${index === 0 ? "min-[350px]:h-[80px] lg:h-[72px] custom-shadow" : index === 1 ? "custom-shadow-sm min-[350px]:h-[80px] lg:h-[98px]" : "custom-shadow min-[350px]:h-[80px] lg:h-[84px]"} rounded-md md:rounded-xl w-auto`}
-                      />
-                    </div>
-                  ))}
+                  <Image
+                    src={import.meta.env.STRAPI_URL + heroImage.url}
+                    alt={heroImage.alternativeText}
+                    width={heroImage.width}
+                    height={heroImage.height}
+                  />
                 </div>
               </div>
             </>

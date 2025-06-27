@@ -27,6 +27,10 @@ export default defineConfig({
   trailingSlash: config.site.trailing_slash ? "always" : "never",
   image: { service: sharp() },
   vite: { plugins: [tailwindcss()] },
+  i18n: {
+    locales: ["ar", "en"],
+    defaultLocale: "ar",
+  },
   integrations: [
     react(),
     sitemap(),
