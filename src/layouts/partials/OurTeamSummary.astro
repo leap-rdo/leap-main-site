@@ -12,6 +12,12 @@ const data = await fetchApi<TeamMember[]>({
   query: { locale: lang, populate: "*" },
 });
 
+let teamData = data;
+
+if (teamData.length > 6) {
+  teamData = teamData.slice(0, 6);
+}
+
 const t = useTranslations(lang);
 ---
 
@@ -20,15 +26,11 @@ const t = useTranslations(lang);
     <div class="row">
       <div class="mx-auto text-center lg:col-10" data-aos="fade-up-sm">
         <h2 class="mb-6" set:html={markdownify(t("team.title"))} />
-        <p
-          class="text-lg/[inherit]"
-          set:html={markdownify(t("team.description"))}
-        />
       </div>
       <div class="col-12 pt-20" data-aos="fade-up-sm" data-aos-delay="200">
         <div class="row g-4 justify-center">
           {
-            data?.map((item) => (
+            teamData?.map((item) => (
               <div class="col-6 lg:col-3">
                 {item.image && (
                   <div class="mb-6 overflow-hidden rounded-xl bg-light text-center md:rounded-3xl">

@@ -5,7 +5,7 @@ import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 
 const contact_form_action = import.meta.env.STRAPI_URL + "/api/contact-request";
 
-const { title, subtitle, description } = Astro.props;
+const { title, description } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
@@ -14,15 +14,7 @@ const t = useTranslations(lang);
   <div class="container">
     <div class="row">
       <div class="lg:col-7 lg:pe-20 lg:pt-16" data-aos="fade-left-sm">
-        {
-          title && (
-            <p
-              class="mb-2 font-medium text-tertiary"
-              set:html={markdownify(title)}
-            />
-          )
-        }
-        {subtitle && <h2 class="md:h1 mb-6" set:html={markdownify(subtitle)} />}
+        {title && <h2 class="md:h1 mb-6" set:html={markdownify(title)} />}
         {
           description && (
             <p class="text-lg/[inherit]" set:html={markdownify(description)} />
