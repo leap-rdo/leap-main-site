@@ -1,14 +1,13 @@
 ---
 import ImageMod from "@/components/ImageMod.astro";
-import config from "@/config/config.json";
 import { markdownify } from "@/lib/utils/textConverter";
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 
-const { contact_form_action } = config.params;
-const { hero } = (
-  (await getEntry("contact", "-index")) as CollectionEntry<"contact">
-).data;
+const contact_form_action = import.meta.env.STRAPI_URL + "/api/contact";
+
+const { title, subtitle, description } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section class="section">
@@ -16,57 +15,40 @@ const { hero } = (
     <div class="row">
       <div class="lg:col-7 lg:pe-20 lg:pt-16" data-aos="fade-left-sm">
         {
-          hero.subtitle && (
+          title && (
             <p
               class="mb-2 font-medium text-tertiary"
-              set:html={markdownify(hero.subtitle)}
+              set:html={markdownify(title)}
             />
           )
         }
+        {subtitle && <h2 class="md:h1 mb-6" set:html={markdownify(subtitle)} />}
         {
-          hero.title && (
-            <h2 class="md:h1 mb-6" set:html={markdownify(hero.title)} />
+          description && (
+            <p class="text-lg/[inherit]" set:html={markdownify(description)} />
           )
         }
-        {
-          hero.description && (
+
+        <div class="mt-10 flex flex-col gap-10 sm:flex-row xl:mt-20">
+          <div>
+            <div
+              class="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-tertiary">
+              <ImageMod
+                class="h-6 w-6 object-cover"
+                src="/images/icons/svg/24.svg"
+                alt={`icon related to ${t("support.title")}`}
+              />
+            </div>
+            <h3
+              class="h6 mb-2 mt-5"
+              set:html={markdownify(t("support.title"))}
+            />
             <p
               class="text-lg/[inherit]"
-              set:html={markdownify(hero.description)}
+              set:html={markdownify(t("support.description"))}
             />
-          )
-        }
-        {
-          hero.list && (
-            <div class="mt-10 flex flex-col gap-10 sm:flex-row xl:mt-20">
-              {hero.list.map((point) => (
-                <div>
-                  {point.icon && (
-                    <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-tertiary">
-                      <ImageMod
-                        class="h-6 w-6 object-cover"
-                        src={point.icon}
-                        alt={`icon related to ${point.title}`}
-                      />
-                    </div>
-                  )}
-                  {point.title && (
-                    <h3
-                      class="h6 mb-2 mt-5"
-                      set:html={markdownify(point.title)}
-                    />
-                  )}
-                  {point.description && (
-                    <p
-                      class="text-lg/[inherit]"
-                      set:html={markdownify(point.description)}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          )
-        }
+          </div>
+        </div>
       </div>
       <div
         class="relative pt-24 lg:col-5 lg:pt-16"
@@ -82,7 +64,8 @@ const { hero } = (
           <form class="row g-4" action={contact_form_action} method="POST">
             <div class="lg:col-6">
               <label for="first-name" class="form-label">
-                First Name <span class="text-red-500">*</span>
+                {t("contact.firstname")}
+                <span class="text-red-500">*</span>
               </label>
               <input
                 id="first-name"
@@ -95,7 +78,8 @@ const { hero } = (
             </div>
             <div class="lg:col-6">
               <label for="last-name" class="form-label">
-                Last Name <span class="text-red-500">*</span>
+                {t("contact.lastname")}
+                <span class="text-red-500">*</span>
               </label>
               <input
                 id="last-name"
@@ -108,7 +92,8 @@ const { hero } = (
             </div>
             <div class="col-12">
               <label for="email" class="form-label">
-                Email <span class="text-red-500">*</span>
+                {t("contact.email")}
+                <span class="text-red-500">*</span>
               </label>
               <input
                 id="email"
@@ -121,7 +106,8 @@ const { hero } = (
             </div>
             <div class="col-12">
               <label for="company-name" class="form-label">
-                Company Name <span class="text-red-500">*</span>
+                {t("contact.companyname")}
+                <span class="text-red-500">*</span>
               </label>
               <input
                 id="company-name"
@@ -134,7 +120,8 @@ const { hero } = (
             </div>
             <div class="col-12">
               <label for="subject" class="form-label">
-                Subject <span class="text-red-500">*</span>
+                {t("contact.subject")}
+                <span class="text-red-500">*</span>
               </label>
               <input
                 id="subject"
@@ -147,7 +134,8 @@ const { hero } = (
             </div>
             <div class="col-12">
               <label for="message" class="form-label">
-                Write Message <span class="text-red-500">*</span>
+                {t("contact.writemessage")}
+                <span class="text-red-500">*</span>
               </label>
               <textarea
                 id="message"
@@ -160,7 +148,7 @@ const { hero } = (
             </div>
             <div class="col-12">
               <button type="submit" class="btn btn-regular">
-                Send Message
+                {t("contact.sendmessage")}
               </button>
             </div>
           </form>
