@@ -3,7 +3,7 @@ import ImageMod from "@/components/ImageMod.astro";
 import { markdownify } from "@/lib/utils/textConverter";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 
-const contact_form_action = import.meta.env.STRAPI_URL + "/api/contact";
+const contact_form_action = import.meta.env.STRAPI_URL + "/api/contact-request";
 
 const { title, subtitle, description } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
@@ -69,9 +69,9 @@ const t = useTranslations(lang);
               </label>
               <input
                 id="first-name"
-                name="first-name"
+                name="firstName"
                 class="form-input"
-                placeholder="Your First Name"
+                placeholder={t("contact.firstname")}
                 required
                 type="text"
               />
@@ -83,9 +83,9 @@ const t = useTranslations(lang);
               </label>
               <input
                 id="last-name"
-                name="last-name"
+                name="lastName"
                 class="form-input"
-                placeholder="Your Last Name"
+                placeholder={t("contact.lastname")}
                 required
                 type="text"
               />
@@ -111,9 +111,9 @@ const t = useTranslations(lang);
               </label>
               <input
                 id="company-name"
-                name="company-name"
+                name="companyName"
                 class="form-input"
-                placeholder="Your Company Name"
+                placeholder={t("contact.companyname")}
                 required
                 type="text"
               />
@@ -127,7 +127,7 @@ const t = useTranslations(lang);
                 id="subject"
                 name="subject"
                 class="form-input"
-                placeholder="Subject of Your Message"
+                placeholder={t("contact.subject")}
                 required
                 type="text"
               />
@@ -141,7 +141,7 @@ const t = useTranslations(lang);
                 id="message"
                 name="message"
                 class="form-input"
-                placeholder="Write Your Message Here"
+                placeholder={t("contact.writemessage")}
                 required
                 rows="3">
               </textarea>
