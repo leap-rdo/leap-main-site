@@ -204,16 +204,22 @@ const t = useTranslations(lang);
     />
 
     <!-- og-image -->
-    <meta
+    {seo?.metaSocial?.ogImage ? <meta
       property="og:image"
-      content={`${seo?.metaSocial.ogImage ? import.meta.env.STRAPI_URL : config.site.base_url}${seo?.metaSocial.ogImage ? seo?.metaSocial.ogImage : image ? image : config.metadata.meta_image}`}
-    />
+      content={`${import.meta.env.STRAPI_URL}${seo?.metaSocial.ogImage ? seo?.metaSocial.ogImage : image ? image : config.metadata.meta_image}`}
+    /> : <meta
+      property="og:image"
+      content={`${config.site.base_url}${image ? image : config.metadata.meta_image}`}
+    />}
 
     <!-- twitter-image -->
-    <meta
+    {seo?.metaSocial?.twitterImage ? <meta
       name="twitter:image"
-      content={`${seo?.metaSocial.twitterImage ? import.meta.env.STRAPI_URL : config.site.base_url}${seo?.metaSocial.twitterImage ? seo?.metaSocial.twitterImage : image ? image : config.metadata.meta_image}`}
-    />
+      content={`${import.meta.env.STRAPI_URL}${seo?.metaSocial.twitterImage ? seo?.metaSocial.twitterImage : image ? image : config.metadata.meta_image}`}
+    /> : <meta
+      name="twitter:image"
+      content={`${config.site.base_url}${image ? image : config.metadata.meta_image}`}
+    />}
     <meta name="twitter:card" content="summary_large_image" />
 
     {seo?.structuredData && (

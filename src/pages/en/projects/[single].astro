@@ -27,6 +27,6 @@ const { image, seo } = project;
 <Base
   seo={seo}
   image={image.url}
-  tl={`en/projects/${project.localizations[0].slug}`}>
+  tl={`/projects/${project.localizations[0].title.replace(" ", "-")}/`}>
   <ProjectSingle project={project} />
 </Base>

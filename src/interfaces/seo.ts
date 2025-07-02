@@ -2,10 +2,10 @@ export default interface Seo {
     metaTitle: string,
     metaRobots: string,
     canonicalURL: string,
-    metaDescription: string;
+    metaDescription: string,
     metaImage: {
       url: string,
-    }
+    },
     metaSocial: {
       ogTitle: string,
       ogDescription: string,

@@ -19,7 +19,7 @@ const data = await fetchApi<About>({
 const { title, image, seo } = data;
 ---
 
-<Base title={title} seo={seo} image={image.url}>
+<Base title={title} seo={seo}>
   <WhyUs content={data.whyUs} />
   <Partners />
   <OurValues

@@ -22,9 +22,9 @@ export interface NavigationLink {
   children?: ChildNavigationLink[];
 }
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const translatePath = useTranslatedPath(lang);
+const pagelang = getLangFromUrl(Astro.url);
+const t = useTranslations(pagelang);
+const translatePath = useTranslatedPath(pagelang);
 
 const { banner, errorPage, tl } = Astro.props;
 const { pathname } = Astro.url;
@@ -95,16 +95,18 @@ const { pathname } = Astro.url;
         </li>
         <li class="nav-item">
           {
-            Object.entries(languages).map(([lang, label]) =>
-              tl ? (
-                <a href={tl} class="nav-link block">
-                  {label}
-                </a>
-              ) : (
-                <a href={translatePath("/", lang)} class="nav-link block">
-                  {label}
-                </a>
-              ),
+            Object.entries(languages).map(
+              ([lang, label]) =>
+                pagelang !== lang &&
+                (tl ? (
+                  <a href={tl} class="nav-link block">
+                    {label}
+                  </a>
+                ) : (
+                  <a href={translatePath("/", lang)} class="nav-link block">
+                    {label}
+                  </a>
+                )),
             )
           }
         </li>

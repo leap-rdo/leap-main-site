@@ -15,6 +15,6 @@ const data = await fetchApi<Contact>({
 const { title, description, Seo } = data;
 ---
 
-<Base title={title} seo={Seo} image={Seo.metaImage.url}>
+<Base title={title} seo={Seo} image={Seo?.metaImage?.url}>
   <ContactHero title={title} description={description} />
 </Base>
