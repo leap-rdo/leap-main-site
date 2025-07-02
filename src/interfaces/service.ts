@@ -1,10 +1,10 @@
 import type Seo from "./seo";
 
-export default interface TeamMember {
+export default interface Service {
   id: string,
-  name: string,
-  bio: string,
-  position: string,
+  title: string,
+  description: string,
+  point: Point[],
   image: {
     alternativeText: string,
     width: number,
@@ -13,4 +13,9 @@ export default interface TeamMember {
     url: string,
   },
   seo: Seo,
+}
+
+interface Point {
+  id: string,
+  point: string,
 }

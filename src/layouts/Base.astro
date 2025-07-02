@@ -1,6 +1,5 @@
 ---
 import { join } from "node:path";
-import TwSizeIndicator from "@/components/TwSizeIndicator.astro";
 import config from "@/config/config.json";
 import theme from "@/config/theme.json";
 import { plainify } from "@/lib/utils/textConverter";
@@ -9,6 +8,8 @@ import Header from "@/partials/Header.astro";
 import "@/styles/main.css";
 import { AstroFont } from "astro-font";
 import { ClientRouter } from "astro:transitions";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import type Seo from '@/interfaces/seo';
 
 // font families
 const pf = theme.fonts.font_family.primary;
@@ -26,19 +27,30 @@ const sf = theme.fonts.font_family.secondary;
 //     .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;.]+/gi, "");
 // }
 
+interface Props {
+  title?: string,
+  meta_title?: string,
+  notFoundPage?: boolean,
+  description?: string,
+  image?: string,
+  seo?: Seo,
+}
+
 const {
   title,
   meta_title,
   notFoundPage,
   description,
   image,
-  noindex,
-  canonical,
+  seo,
 } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang} dir={t("direction")}>
   <head>
     <!-- favicon -->
     <link rel="shortcut icon" href={config.site.favicon} />
@@ -71,7 +83,7 @@ const {
                 process.cwd(),
                 "public",
                 "fonts",
-                "Satoshi-Regular.woff2"
+                "Satoshi-Regular.woff2",
               ),
             },
             {
@@ -81,7 +93,7 @@ const {
                 process.cwd(),
                 "public",
                 "fonts",
-                "Satoshi-Medium.woff2"
+                "Satoshi-Medium.woff2",
               ),
             },
             {
@@ -91,7 +103,7 @@ const {
                 process.cwd(),
                 "public",
                 "fonts",
-                "Satoshi-Bold.woff2"
+                "Satoshi-Bold.woff2",
               ),
             },
           ],
@@ -111,7 +123,7 @@ const {
                 process.cwd(),
                 "public",
                 "fonts",
-                "ClashGrotesk-Medium.woff2"
+                "ClashGrotesk-Medium.woff2",
               ),
             },
           ],
@@ -132,20 +144,20 @@ const {
 
     <!-- title -->
     <title>
-      {plainify(meta_title ? meta_title : title ? title : config.site.title)}
+      {plainify(seo?.metaTitle? seo?.metaTitle: title? title : config.site.title)}
     </title>
 
     <!-- canonical url -->
-    {canonical && <link rel="canonical" href={canonical} item-prop="url" />}
+    {seo?.canonicalURL && <link rel="canonical" href={seo?.canonicalURL} item-prop="url" />}
 
     <!-- noindex robots -->
-    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    {seo?.metaRobots && <meta name="robots" content={seo?.metaRobots} />}
 
     <!-- meta-description -->
     <meta
       name="description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        seo?.metaDescription ? seo?.metaDescription : config.metadata.meta_description,
       )}
     />
 
@@ -155,10 +167,11 @@ const {
     <meta name="author" content={config.metadata.meta_author} />
 
     <!-- og-title -->
+     <!-- ----------------------------------------------------------------- -->
     <meta
       property="og:title"
       content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title
+        meta_title ? meta_title : title ? title : config.site.title,
       )}
     />
 
@@ -166,7 +179,7 @@ const {
     <meta
       property="og:description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        description ? description : config.metadata.meta_description,
       )}
     />
     <meta property="og:type" content="website" />
@@ -179,7 +192,7 @@ const {
     <meta
       name="twitter:title"
       content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title
+        meta_title ? meta_title : title ? title : config.site.title,
       )}
     />
 
@@ -187,7 +200,7 @@ const {
     <meta
       name="twitter:description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        description ? description : config.metadata.meta_description,
       )}
     />
 
@@ -207,10 +220,15 @@ const {
       }`}
     />
     <meta name="twitter:card" content="summary_large_image" />
+
+    {seo?.structuredData && (
+      <script type="application/ld+json">
+        {seo?.structuredData}
+      </script>
+    )}
   </head>
   <body>
-    <TwSizeIndicator />
-    <Header banner={Astro.url.pathname === "/"} errorPage={notFoundPage} />
+    <Header banner={Astro.url.pathname === "/" || Astro.url.pathname === "/en/"} errorPage={notFoundPage} />
     <main id="main-content">
       <slot />
     </main>

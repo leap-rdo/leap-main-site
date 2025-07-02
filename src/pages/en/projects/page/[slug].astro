@@ -1,0 +1,59 @@
+---
+import Pagination from "@/components/Pagination.astro";
+import config from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
+import ProjectsSection from "@/partials/ProjectsSection.astro";
+import CallToAction from "@/partials/CallToAction.astro";
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
+import fetchApi from "@/lib/strapi";
+import type Project from "@/interfaces/project";
+
+const projects = await fetchApi<Project[]>({
+  endpoint: "projects",
+  wrappedByKey: "data",
+  query: { locale: "en", populate: "*" },
+});
+
+const { slug } = Astro.params;
+const totalPages = Math.ceil(projects.length / config.settings.pagination);
+const currentPage = slug && !isNaN(Number(slug)) ? Number(slug) : 1;
+const indexOfLastPost = currentPage * config.settings.pagination;
+const indexOfFirstPost = indexOfLastPost - config.settings.pagination;
+const currentPosts = projects.slice(indexOfFirstPost, indexOfLastPost);
+
+export async function getStaticPaths() {
+  const projects = await fetchApi<Project[]>({
+    endpoint: "projects",
+    wrappedByKey: "data",
+    query: { locale: "en", populate: "*" },
+  });
+
+  const totalPages = Math.ceil(projects.length / config.settings.pagination);
+  const paths = [];
+
+  for (let i = 1; i < totalPages; i++) {
+    paths.push({
+      params: {
+        slug: (i + 1).toString(),
+      },
+    });
+  }
+  return paths;
+}
+
+const projectMeta = (await getEntry(
+  "blog",
+  "-index",
+)) as CollectionEntry<"blog">;
+---
+
+<Base
+  title={projectMeta.data.title}
+  meta_title={projectMeta.data.meta_title}
+  image={projectMeta.data.image}
+  description={projectMeta.data.description}>
+  <ProjectsSection visibleProjects={6} projects={currentPosts} />
+  <Pagination currentPage={currentPage} totalPages={totalPages} />
+  <CallToAction />
+</Base>

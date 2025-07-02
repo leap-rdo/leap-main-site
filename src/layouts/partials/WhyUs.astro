@@ -1,0 +1,89 @@
+---
+import DynamicIcon from "@/helpers/DynamicIcon";
+import { markdownify } from "@/lib/utils/textConverter";
+import ImageMod from "@/components/ImageMod.astro";
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath,
+} from "../../i18n/utils";
+
+const { content } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+---
+
+<section class="section">
+  <div class="container">
+    <div class="row">
+      <div class="mx-auto text-center lg:col-8" data-aos="fade-up-sm">
+        <h2 class="mb-6" set:html={markdownify(t("whyus.title"))} />
+        <p
+          class="text-lg/[inherit]"
+          set:html={markdownify(t("whyus.description"))}
+        />
+      </div>
+      <div class="col-12 pt-20">
+        <div class="row gx-0 gy-5 mb-14 items-center last:mb-0 md:mb-28">
+          <div class="lg:col-6" data-aos="fade-up-sm" data-aos-delay={100}>
+            <div class="overflow-hidden rounded-3xl bg-light pl-14 pt-14">
+              <ImageMod
+                class="rounded-tl-3xl drop-shadow-lg"
+                src="/images/about-2.jpg"
+                alt="icon related to Why Leap Section"
+              />
+            </div>
+          </div>
+          <div
+            class="lg:ps-20 lg:col-6"
+            data-aos="fade-up-sm"
+            data-aos-delay={300}>
+            {
+              content && (
+                <ul class="list list-dark mt-10 flex flex-col gap-4">
+                  {content.map((point) => (
+                    <li>
+                      {point.title && (
+                        <h3
+                          class="h6 mb-2"
+                          set:html={markdownify(point.title)}
+                        />
+                      )}
+                      {point.point && (
+                        <p
+                          class="text-lg/[inherit]"
+                          set:html={markdownify(point.point)}
+                        />
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+            <a class="btn btn-primary mt-12" href={translatePath("/contact/")}>
+              {t("nav.contact")}
+              <span class="icon-wrapper">
+                <span class="icon">
+                  <DynamicIcon
+                    icon={t("direction") == "ltr"
+                      ? "FaArrowRight"
+                      : "FaArrowLeft"}
+                  />
+                </span>
+                <span class="icon" aria-hidden="true">
+                  <DynamicIcon
+                    icon={t("direction") == "ltr"
+                      ? "FaArrowRight"
+                      : "FaArrowLeft"}
+                  />
+                </span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

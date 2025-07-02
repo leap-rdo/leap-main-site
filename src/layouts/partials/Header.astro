@@ -1,10 +1,13 @@
 ---
 import ImageMod from "@/components/ImageMod.astro";
 import Logo from "@/components/Logo.astro";
-import config from "@/config/config.json";
-import menu from "@/config/menu.json";
 import DynamicIcon from "@/helpers/DynamicIcon";
 import HomeBanner from "./HomeBanner.astro";
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath,
+} from "../../i18n/utils";
 
 export interface ChildNavigationLink {
   name: string;
@@ -18,15 +21,16 @@ export interface NavigationLink {
   children?: ChildNavigationLink[];
 }
 
-const { banner, errorPage } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 
-const { main }: { main: NavigationLink[] } = menu;
-const { navigation_button } = config;
+const { banner, errorPage } = Astro.props;
 const { pathname } = Astro.url;
 ---
 
 <div
-  class={`header-wrapper ${Astro.url.pathname === "/" ? "relative" : !errorPage && "pb-6"}`}>
+  class={`header-wrapper ${Astro.url.pathname === translatePath("/") ? "relative" : !errorPage && "pb-6"}`}>
   <header class="header relative">
     <nav class="navbar container relative z-10">
       <!-- logo -->
@@ -60,95 +64,76 @@ const { pathname } = Astro.url;
       <ul
         id="nav-menu"
         class="navbar-nav order-3 hidden pb-6 lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8">
-        {
-          main.map((menu) => (
-            <>
-              {menu.hasChildren ? (
-                <li class="nav-item nav-dropdown group relative">
-                  <span
-                    class={`nav-link inline-flex items-center ${
-                      menu.children?.map(({ url }) => url).includes(pathname) ||
-                      menu.children
-                        ?.map(({ url }) => `${url}/`)
-                        .includes(pathname)
-                        ? "active"
-                        : ""
-                    }`}>
-                    {menu.name}
-                    <span class="arrow-icon">
-                      <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </span>
-                  </span>
-                  <ul class="nav-dropdown-list max-lg:hidden lg:invisible lg:absolute lg:translate-y-1 lg:opacity-0 lg:transition-all lg:duration-300 lg:group-hover:visible lg:group-hover:block lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
-                    {menu.children?.map((child) => (
-                      <li class="nav-dropdown-item">
-                        <a
-                          href={child.url}
-                          aria-label={child.name}
-                          class={`nav-dropdown-link block ${
-                            (pathname === `${child.url}/` ||
-                              pathname === child.url) &&
-                            "active"
-                          }`}>
-                          {child.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ) : (
-                <li class="nav-item">
-                  <a
-                    href={menu.url}
-                    class={`nav-link block ${
-                      (pathname === `${menu.url}/` || pathname === menu.url) &&
-                      "active"
-                    }`}>
-                    {menu.name}
-                  </a>
-                </li>
-              )}
-            </>
-          ))
-        }
-        {
-          navigation_button.enable && (
-            <a
-              class="btn btn-dark mt-2 lg:hidden"
-              href={navigation_button.link}>
-              {navigation_button.label}
-              <span class="icon-wrapper">
-                <span class="icon">
-                  <DynamicIcon icon={"FaArrowRight"} />
-                </span>
-                <span class="icon" aria-hidden="true">
-                  <DynamicIcon icon={"FaArrowRight"} />
-                </span>
+        <li class="nav-item">
+          <a
+            href={translatePath("/")}
+            class={`nav-link block ${pathname === translatePath("/") && "active"}`}>
+            {t("nav.home")}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href={translatePath("/about/")}
+            class={`nav-link block ${pathname === translatePath("/about/") && "active"}`}>
+            {t("nav.about")}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href={translatePath("/services/")}
+            class={`nav-link block ${pathname === translatePath("/services/") && "active"}`}>
+            {t("nav.services")}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href={translatePath("/projects/")}
+            class={`nav-link block ${pathname === translatePath("/projects/") && "active"}`}>
+            {t("nav.projects")}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="btn btn-dark mt-2 lg:hidden"
+            href={translatePath("/contact/")}>
+            {t("nav.contact")}
+            <span class="icon-wrapper">
+              <span class="icon">
+                <DynamicIcon
+                  icon={t("direction") == "ltr"
+                    ? "FaArrowRight"
+                    : "FaArrowLeft"}
+                />
               </span>
-            </a>
-          )
-        }
+              <span class="icon" aria-hidden="true">
+                <DynamicIcon
+                  icon={t("direction") == "ltr"
+                    ? "FaArrowRight"
+                    : "FaArrowLeft"}
+                />
+              </span>
+            </span>
+          </a>
+        </li>
       </ul>
       <div class="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
-        {
-          navigation_button.enable && (
-            <a
-              class="btn btn-dark hidden lg:flex"
-              href={navigation_button.link}>
-              {navigation_button.label}
-              <span class="icon-wrapper">
-                <span class="icon">
-                  <DynamicIcon icon={"FaArrowRight"} />
-                </span>
-                <span class="icon" aria-hidden="true">
-                  <DynamicIcon icon={"FaArrowRight"} />
-                </span>
-              </span>
-            </a>
-          )
-        }
+        <a
+          class="btn btn-dark hidden lg:flex"
+          href={translatePath("/contact/")}>
+          {t("nav.contact")}
+          <span class="icon-wrapper">
+            <span class="icon">
+              <DynamicIcon
+                icon={t("direction") == "ltr" ? "FaArrowRight" : "FaArrowLeft"}
+              />
+            </span>
+            <span class="icon" aria-hidden="true">
+              <DynamicIcon
+                icon={t("direction") == "ltr" ? "FaArrowRight" : "FaArrowLeft"}
+              />
+            </span>
+          </span>
+        </a>
       </div>
     </nav>
   </header>

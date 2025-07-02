@@ -1,0 +1,34 @@
+---
+import Base from "@/layouts/Base.astro";
+import BlogSingle from "@/layouts/ProjectSingle.astro";
+import fetchApi from "@/lib/strapi";
+import type Project from "@/interfaces/project";
+
+export async function getStaticPaths() {
+  const data = await fetchApi<Project[]>({
+    endpoint: "projects",
+    wrappedByKey: "data",
+    query: { locale: "en", populate: "*" },
+  });
+
+  const paths = data.map((project: Project) => ({
+    params: {
+      single: project.slug,
+    },
+    props: { project },
+  }));
+  return paths;
+}
+
+const { project } = Astro.props;
+const { title, description, image } = project;
+---
+
+<Base
+  title={title}
+  meta_title=""
+  description={description}
+  image={image}
+  t={`projects/${project.localizations[0].title.replace(" ", "-")}`}>
+  <BlogSingle project={project} />
+</Base>

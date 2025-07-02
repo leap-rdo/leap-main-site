@@ -1,11 +1,19 @@
 ---
 import Base from "@/layouts/Base.astro";
+import AboutBanner from "@/partials/AboutBanner.astro";
 import CallToAction from "@/partials/CallToAction.astro";
 import Partners from "@/partials/Partners.astro";
+import Faq from "@/partials/Faq.astro";
 import OurTeamSummary from "@/partials/OurTeamSummary.astro";
 import WhyUs from "@/partials/WhyUs.astro";
 import OurValues from "@/partials/OurValues.astro";
-import { getLangFromUrl } from "@/i18n/utils";
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath,
+} from "@/i18n/utils";
 import fetchApi from "@/lib/strapi";
 import type About from "@/interfaces/about";
 
@@ -16,10 +24,15 @@ const data = await fetchApi<About>({
   query: { locale: lang, populate: "*" },
 });
 
-const { title, image, seo } = data;
+const about = (await getEntry("about", "-index")) as CollectionEntry<"about">;
+const { title, description, meta_title, image } = about.data;
 ---
 
-<Base title={title} seo={seo} image={image.url}>
+<Base
+  title={title}
+  meta_title={meta_title}
+  description={description}
+  image={image}>
   <WhyUs content={data.whyUs} />
   <Partners />
   <OurValues

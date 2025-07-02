@@ -1,0 +1,38 @@
+---
+import Pagination from "@/components/Pagination.astro";
+import config from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
+import ProjectsSection from "@/partials/ProjectsSection.astro";
+import CallToAction from "@/partials/CallToAction.astro";
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
+import { getLangFromUrl } from "../../i18n/utils";
+import fetchApi from "../../lib/strapi";
+import type Project from "../../interfaces/project";
+
+const lang = getLangFromUrl(Astro.url);
+
+const data = await fetchApi<Project[]>({
+  endpoint: "projects",
+  wrappedByKey: "data",
+  query: { locale: lang, populate: "*" },
+});
+const totalPages: number = Math.ceil(data.length / config.settings.pagination);
+
+const pageMeta = (await getEntry("blog", "-index")) as CollectionEntry<"blog">;
+---
+
+<Base
+  title={pageMeta.data.title}
+  meta_title={pageMeta.data.meta_title}
+  image={pageMeta.data.image}
+  description={pageMeta.data.description}>
+  <ProjectsSection
+    largeHeading={true}
+    visibleProjects={6}
+    projects={data}
+    cardLayout="creative"
+  />
+  <Pagination totalPages={totalPages} />
+  <CallToAction />
+</Base>
