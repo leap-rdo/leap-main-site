@@ -1,9 +1,9 @@
 ---
 import { Image } from "astro:assets";
 import { markdownify } from "@/lib/utils/textConverter";
-import { getLangFromUrl, useTranslations } from "../../i18n/utils";
-import fetchApi from "../../lib/strapi";
-import type TeamMember from "../../interfaces/teamMember";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import fetchApi from "@/lib/strapi";
+import type TeamMember from "@/interfaces/teamMember";
 
 const lang = getLangFromUrl(Astro.url);
 const data = await fetchApi<TeamMember[]>({

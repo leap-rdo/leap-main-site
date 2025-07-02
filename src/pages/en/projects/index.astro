@@ -4,11 +4,9 @@ import config from "@/config/config.json";
 import Base from "@/layouts/Base.astro";
 import ProjectsSection from "@/partials/ProjectsSection.astro";
 import CallToAction from "@/partials/CallToAction.astro";
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
-import { getLangFromUrl } from "../../../i18n/utils";
-import fetchApi from "../../../lib/strapi";
-import type Project from "../../../interfaces/project";
+import { getLangFromUrl } from "@/i18n/utils";
+import fetchApi from "@/lib/strapi";
+import type Project from "@/interfaces/project";
 
 const lang = getLangFromUrl(Astro.url);
 
@@ -19,14 +17,11 @@ const data = await fetchApi<Project[]>({
 });
 const totalPages: number = Math.ceil(data.length / config.settings.pagination);
 
-const pageMeta = (await getEntry("blog", "-index")) as CollectionEntry<"blog">;
+const title = "Our Projects";
+const description = "Leap RDO Projects";
 ---
 
-<Base
-  title={pageMeta.data.title}
-  meta_title={pageMeta.data.meta_title}
-  image={pageMeta.data.image}
-  description={pageMeta.data.description}>
+<Base title={title} description={description}>
   <ProjectsSection
     largeHeading={true}
     visibleProjects={6}

@@ -5,9 +5,9 @@ import {
   getLangFromUrl,
   useTranslations,
   useTranslatedPath,
-} from "../../i18n/utils";
-import fetchApi from "../../lib/strapi";
-import type Service from "../../interfaces/service";
+} from "@/i18n/utils";
+import fetchApi from "@/lib/strapi";
+import type Service from "@/interfaces/service";
 import { Image } from "astro:assets";
 
 const lang = getLangFromUrl(Astro.url);

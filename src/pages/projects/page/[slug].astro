@@ -4,8 +4,6 @@ import config from "@/config/config.json";
 import Base from "@/layouts/Base.astro";
 import ProjectsSection from "@/partials/ProjectsSection.astro";
 import CallToAction from "@/partials/CallToAction.astro";
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
 import fetchApi from "@/lib/strapi";
 import type Project from "@/interfaces/project";
 
@@ -42,17 +40,11 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const projectMeta = (await getEntry(
-  "blog",
-  "-index",
-)) as CollectionEntry<"blog">;
+const title = "المشاريع";
+const description = "مشاريع ليب (واثب)";
 ---
 
-<Base
-  title={projectMeta.data.title}
-  meta_title={projectMeta.data.meta_title}
-  image={projectMeta.data.image}
-  description={projectMeta.data.description}>
+<Base title={title} description={description}>
   <ProjectsSection visibleProjects={6} projects={currentPosts} />
   <Pagination currentPage={currentPage} totalPages={totalPages} />
   <CallToAction />

@@ -1,6 +1,6 @@
 ---
 import Base from "@/layouts/Base.astro";
-import BlogSingle from "@/layouts/ProjectSingle.astro";
+import ProjectSingle from "@/layouts/ProjectSingle.astro";
 import fetchApi from "@/lib/strapi";
 import type Project from "@/interfaces/project";
 
@@ -21,14 +21,12 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { title, description, image } = project;
+const { image, seo } = project;
 ---
 
 <Base
-  title={title}
-  meta_title=""
-  description={description}
-  image={image}
-  t={`projects/${project.localizations[0].title.replace(" ", "-")}`}>
-  <BlogSingle project={project} />
+  seo={seo}
+  image={image.url}
+  t={`en/projects/${project.localizations[0].slug}`}>
+  <ProjectSingle project={project} />
 </Base>

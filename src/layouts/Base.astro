@@ -29,7 +29,6 @@ const sf = theme.fonts.font_family.secondary;
 
 interface Props {
   title?: string,
-  meta_title?: string,
   notFoundPage?: boolean,
   description?: string,
   image?: string,
@@ -38,7 +37,6 @@ interface Props {
 
 const {
   title,
-  meta_title,
   notFoundPage,
   description,
   image,
@@ -171,7 +169,7 @@ const t = useTranslations(lang);
     <meta
       property="og:title"
       content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title,
+        seo?.metaTitle? seo?.metaTitle: title? title : config.site.title,
       )}
     />
 
@@ -192,7 +190,7 @@ const t = useTranslations(lang);
     <meta
       name="twitter:title"
       content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title,
+        seo?.metaTitle? seo?.metaTitle: title? title : config.site.title,
       )}
     />
 

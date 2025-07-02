@@ -6,9 +6,9 @@ import {
   getLangFromUrl,
   useTranslations,
   useTranslatedPath,
-} from "../../i18n/utils";
-import fetchApi from "../../lib/strapi";
-import type CallToAction from "../../interfaces/callToAction";
+} from "@/i18n/utils";
+import fetchApi from "@/lib/strapi";
+import type CallToAction from "@/interfaces/callToAction";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -33,7 +33,7 @@ const { title, description } = data;
         data-aos-delay="200">
         <ImageMod
           class="h-[641px] w-auto"
-          src={"/images/cta-bg.svg"}
+          src="/images/cta-bg.svg"
           alt="cta-image"
         />
       </div>

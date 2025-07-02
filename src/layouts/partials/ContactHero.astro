@@ -1,7 +1,7 @@
 ---
 import ImageMod from "@/components/ImageMod.astro";
 import { markdownify } from "@/lib/utils/textConverter";
-import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
 const contact_form_action = import.meta.env.STRAPI_URL + "/api/contact-request";
 
@@ -48,7 +48,7 @@ const t = useTranslations(lang);
         data-aos-delay="200">
         <ImageMod
           class="absolute left-1/2 top-5 -z-10 w-20 -translate-x-1/2 lg:-top-7"
-          src={"/images/logo-icon.svg"}
+          src="/images/logo-icon.svg"
           alt="hero image"
           loading="eager"
         />

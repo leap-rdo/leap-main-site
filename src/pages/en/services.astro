@@ -2,21 +2,13 @@
 import Base from "@/layouts/Base.astro";
 import CallToAction from "@/partials/CallToAction.astro";
 import ServicesSection from "@/partials/ServicesSection.astro";
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
 
-const features = (await getEntry(
-  "features",
-  "-index",
-)) as CollectionEntry<"features">;
-const { title, description, meta_title, image } = features.data;
+const image = "";
+const title = "Services";
+const description = "Leap RDO Services and Core Areas";
 ---
 
-<Base
-  title={title}
-  meta_title={meta_title}
-  description={description}
-  image={image}>
+<Base title={title} description={description} image={image}>
   <ServicesSection />
   <CallToAction />
 </Base>

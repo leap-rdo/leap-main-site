@@ -6,9 +6,9 @@ import {
   getLangFromUrl,
   useTranslations,
   useTranslatedPath,
-} from "../../i18n/utils";
-import fetchApi from "../../lib/strapi";
-import type Home from "../../interfaces/home";
+} from "@/i18n/utils";
+import fetchApi from "@/lib/strapi";
+import type Home from "@/interfaces/home";
 
 const lang = getLangFromUrl(Astro.url);
 const homeData = await fetchApi<Home>({
