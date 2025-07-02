@@ -3,6 +3,7 @@ import ImageMod from "@/components/ImageMod.astro";
 import Logo from "@/components/Logo.astro";
 import DynamicIcon from "@/helpers/DynamicIcon";
 import HomeBanner from "./HomeBanner.astro";
+import { languages } from "@/i18n/ui";
 import {
   getLangFromUrl,
   useTranslations,
@@ -25,7 +26,7 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
-const { banner, errorPage } = Astro.props;
+const { banner, errorPage, tl } = Astro.props;
 const { pathname } = Astro.url;
 ---
 
@@ -91,6 +92,21 @@ const { pathname } = Astro.url;
             class={`nav-link block ${pathname === translatePath("/projects/") && "active"}`}>
             {t("nav.projects")}
           </a>
+        </li>
+        <li class="nav-item">
+          {
+            Object.entries(languages).map(([lang, label]) =>
+              tl ? (
+                <a href={tl} class="nav-link block">
+                  {label}
+                </a>
+              ) : (
+                <a href={translatePath("/", lang)} class="nav-link block">
+                  {label}
+                </a>
+              ),
+            )
+          }
         </li>
         <li class="nav-item">
           <a

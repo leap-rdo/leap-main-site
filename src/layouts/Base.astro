@@ -31,6 +31,7 @@ interface Props {
   title?: string,
   notFoundPage?: boolean,
   description?: string,
+  tl?: string,
   image?: string,
   seo?: Seo,
 }
@@ -39,6 +40,7 @@ const {
   title,
   notFoundPage,
   description,
+  tl,
   image,
   seo,
 } = Astro.props;
@@ -165,11 +167,10 @@ const t = useTranslations(lang);
     <meta name="author" content={config.metadata.meta_author} />
 
     <!-- og-title -->
-     <!-- ----------------------------------------------------------------- -->
     <meta
       property="og:title"
       content={plainify(
-        seo?.metaTitle? seo?.metaTitle: title? title : config.site.title,
+        seo?.metaSocial?.ogTitle ? seo?.metaSocial?.ogTitle : title? title : config.site.title,
       )}
     />
 
@@ -177,7 +178,7 @@ const t = useTranslations(lang);
     <meta
       property="og:description"
       content={plainify(
-        description ? description : config.metadata.meta_description,
+        seo?.metaSocial?.ogDescription ? seo?.metaSocial?.ogDescription : description ? description : config.metadata.meta_description,
       )}
     />
     <meta property="og:type" content="website" />
@@ -190,7 +191,7 @@ const t = useTranslations(lang);
     <meta
       name="twitter:title"
       content={plainify(
-        seo?.metaTitle? seo?.metaTitle: title? title : config.site.title,
+        seo?.metaSocial?.twitterTitle ? seo?.metaSocial?.twitterTitle : title? title : config.site.title,
       )}
     />
 
@@ -198,24 +199,20 @@ const t = useTranslations(lang);
     <meta
       name="twitter:description"
       content={plainify(
-        description ? description : config.metadata.meta_description,
+        seo?.metaSocial?.twitterDescription ? seo?.metaSocial?.twitterDescription : description ? description : config.metadata.meta_description,
       )}
     />
 
     <!-- og-image -->
     <meta
       property="og:image"
-      content={`${config.site.base_url}${
-        image ? image : config.metadata.meta_image
-      }`}
+      content={`${seo?.metaSocial.ogImage ? import.meta.env.STRAPI_URL : config.site.base_url}${seo?.metaSocial.ogImage ? seo?.metaSocial.ogImage : image ? image : config.metadata.meta_image}`}
     />
 
     <!-- twitter-image -->
     <meta
       name="twitter:image"
-      content={`${config.site.base_url}${
-        image ? image : config.metadata.meta_image
-      }`}
+      content={`${seo?.metaSocial.twitterImage ? import.meta.env.STRAPI_URL : config.site.base_url}${seo?.metaSocial.twitterImage ? seo?.metaSocial.twitterImage : image ? image : config.metadata.meta_image}`}
     />
     <meta name="twitter:card" content="summary_large_image" />
 
@@ -226,7 +223,7 @@ const t = useTranslations(lang);
     )}
   </head>
   <body>
-    <Header banner={Astro.url.pathname === "/" || Astro.url.pathname === "/en/"} errorPage={notFoundPage} />
+    <Header banner={Astro.url.pathname === "/" || Astro.url.pathname === "/en/"} errorPage={notFoundPage} tl={tl} />
     <main id="main-content">
       <slot />
     </main>
