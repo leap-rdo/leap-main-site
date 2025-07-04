@@ -3,9 +3,16 @@ import { markdownify } from "@/lib/utils/textConverter";
 import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import fetchApi from "@/lib/strapi";
+import type Partner from "@/interfaces/partner";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const data = await fetchApi<Partner[]>({
+  endpoint: "partners",
+  wrappedByKey: "data",
+});
 
 const clients = (await getEntry(
   "clientsSection",
@@ -30,11 +37,21 @@ const { title, list } = clients.data;
         <div
           class="flex justify-center gap-x-12 gap-y-6 grayscale opacity-50 max-lg:flex-wrap">
           {
-            list?.map((logo) => (
-              <div class="flex aspect-[3.125_/_1] w-36 items-center">
-                <img src={logo} alt="brand logo" height="120" />
-              </div>
-            ))
+            data?.map((partner) =>
+              partner.image ? (
+                <div class="flex aspect-[3.125_/_1] w-36 items-center">
+                  <img
+                    src={partner.image.url}
+                    alt={`${partner.name} Logo`}
+                    height="120"
+                  />
+                </div>
+              ) : (
+                <div class="flex aspect-[3.125_/_1] items-center font-bold text-lg">
+                  {partner.name}
+                </div>
+              ),
+            )
           }
         </div>
       </div>
