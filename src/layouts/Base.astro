@@ -206,7 +206,7 @@ const t = useTranslations(lang);
     <!-- og-image -->
     {seo?.metaSocial?.ogImage ? <meta
       property="og:image"
-      content={`${import.meta.env.STRAPI_URL}${seo?.metaSocial.ogImage ? seo?.metaSocial.ogImage : image ? image : config.metadata.meta_image}`}
+      content={`${seo?.metaSocial.ogImage ? seo?.metaSocial.ogImage : image ? image : config.metadata.meta_image}`}
     /> : <meta
       property="og:image"
       content={`${config.site.base_url}${image ? image : config.metadata.meta_image}`}
@@ -215,7 +215,7 @@ const t = useTranslations(lang);
     <!-- twitter-image -->
     {seo?.metaSocial?.twitterImage ? <meta
       name="twitter:image"
-      content={`${import.meta.env.STRAPI_URL}${seo?.metaSocial.twitterImage ? seo?.metaSocial.twitterImage : image ? image : config.metadata.meta_image}`}
+      content={`${seo?.metaSocial.twitterImage ? seo?.metaSocial.twitterImage : image ? image : config.metadata.meta_image}`}
     /> : <meta
       name="twitter:image"
       content={`${config.site.base_url}${image ? image : config.metadata.meta_image}`}

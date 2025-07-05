@@ -45,7 +45,7 @@ const translatePath = useTranslatedPath(lang);
                   {item.image && (
                     <Image
                       class="rounded-tl-3xl drop-shadow-lg"
-                      src={import.meta.env.STRAPI_URL + item.image.url}
+                      src={item.image.url}
                       alt={`icon related to ${item.title}`}
                       width={item.image.width}
                       height={item.image.height}

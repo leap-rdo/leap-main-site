@@ -29,7 +29,7 @@ const {
       <div class="relative flex items-center justify-center">
         <Image
           class={`${cardLayout === "creative" ? "absolute h-[80%] w-[90%] md:h-[70%] md:w-[82%]" : "h-[300px]"} mb-6 rounded-3xl object-cover`}
-          src={import.meta.env.STRAPI_URL + image.url}
+          src={image.url}
           alt={title}
           width={image.width}
           height={image.height}

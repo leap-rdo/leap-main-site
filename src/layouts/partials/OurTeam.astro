@@ -34,7 +34,7 @@ const t = useTranslations(lang);
                   <div class="mb-6 overflow-hidden rounded-xl bg-light text-center md:rounded-3xl">
                     <Image
                       class="w-full"
-                      src={import.meta.env.STRAPI_URL + item.image.url}
+                      src={item.image.url}
                       alt={`photo of ${item.name}`}
                       width={item.image.width}
                       height={item.image.height}

@@ -41,7 +41,7 @@ const parsedContent = marked.parse(content);
           image && (
             <div class="mb-10">
               <Image
-                src={import.meta.env.STRAPI_URL + image.url}
+                src={image.url}
                 height={image.height}
                 width={image.width}
                 alt={title}
