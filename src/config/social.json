@@ -6,19 +6,19 @@
       "link": "https://www.facebook.com/LeapTechSA"
     },
     {
-      "name": "twitter",
-      "icon": "FaTwitter",
-      "link": "https://twitter.com/LeapTechSA"
+      "name": "X",
+      "icon": "FaXTwitter",
+      "link": "https://x.com/LEAP_RDO"
     },
     {
       "name": "github",
       "icon": "FaGithub",
-      "link": "https://www.github.com/LeapTechSA"
+      "link": "https://www.github.com/leap-rdo"
     },
     {
       "name": "linkedin",
       "icon": "FaLinkedin",
-      "link": "https://www.linkedin.com/LeapTechSA"
+      "link": "https://www.linkedin.com/company/leap_rdo"
     }
   ]
 }
